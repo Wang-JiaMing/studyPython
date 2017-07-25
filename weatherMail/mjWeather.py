@@ -21,7 +21,7 @@ def getWeatherMsg():
 
     # 预警信号
     weatherWarning = soup.find(attrs={'class': 'warning_aqi'})
-    if weatherWarning != '':
+    if weatherWarning != None:
         weatherConntent += '现悬挂' + weatherWarning.select('em')[0].string + '预警信号\n\n'
 
     # 摄氏度+天气情况
@@ -54,5 +54,8 @@ def getWeatherMsg():
         if live[ii].dd != None:
             weatherConntent += live[ii].dd.string + ':' + live[ii].dt.string + '\n\n'
         ii += 1
-
+    print(weatherConntent)
     return weatherConntent
+
+
+getWeatherMsg()
