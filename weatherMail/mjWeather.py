@@ -2,10 +2,9 @@
 import urllib.request
 from bs4 import BeautifulSoup
 
-
-def getWeatherMsg():
+def getSoup():
     # 网址
-    url = "http://tianqi.moji.com/"
+    url = "https://tianqi.moji.com/weather/china/guangdong/nansha-district"
     # 请求
     request = urllib.request.Request(url)
     # 爬取结果
@@ -14,6 +13,10 @@ def getWeatherMsg():
     # 设置解码方式
     data = data.decode('utf-8')
     soup = BeautifulSoup(data, 'html.parser')
+    return soup
+
+def getWeatherMsg():
+    soup = getSoup();
     weatherConntent = ''
     weatherConntent += '[概览]' + soup.find_all('meta')[2]['content'].replace('墨迹天气', '小明同学') + '\n\n'
     weatherConntent += '服务器所在地区:' + soup.find_all('em')[0].string + '\n\n'
@@ -29,19 +32,18 @@ def getWeatherMsg():
     # 湿度+风向
     sd_fx = soup.find(attrs={'class': 'wea_about clearfix'})
     # 今日提示
-    tip = soup.find(attrs={'class': 'wea_tips clearfix'})
     weatherConntent += '--------现在情况--------\n'
     weatherConntent += '温度:' + ssd.em.string + '℃\n\n'
     weatherConntent += '天气情况:' + ssd.b.string + '\n\n'
     weatherConntent += sd_fx.span.string + '\n\n'
     weatherConntent += sd_fx.em.string + '\n\n'
-    weatherConntent += tip.span.string + ' ' + tip.em.string + '\n\n'
     weatherConntent += '天气更新时间:' + ssd.strong.string + '\n\n'
     weatherConntent += '--------天气预报--------\n'
     tqyb = soup.find(attrs={'class': 'forecast clearfix'}).select('ul')
     i = 1
     while i < len(tqyb):
-        weatherConntent += tqyb[i].find_all('li')[0].a.string + ' ' + tqyb[i].find_all('li')[1].get_text(strip=True) + ' ' + \
+        weatherConntent += tqyb[i].find_all('li')[0].a.string + ' ' + tqyb[i].find_all('li')[1].get_text(
+            strip=True) + ' ' + \
                            tqyb[i].find_all('li')[2].string + '(最低温度/最高温度) ' + tqyb[i].find_all('li')[3].em.string + \
                            tqyb[i].find_all('li')[3].b.string + '\n\n'
         i += 1
@@ -54,8 +56,11 @@ def getWeatherMsg():
         if live[ii].dd != None:
             weatherConntent += live[ii].dd.string + ':' + live[ii].dt.string + '\n\n'
         ii += 1
-    print(weatherConntent)
+
     return weatherConntent
 
 
-getWeatherMsg()
+def getWeatherTitle():
+    soup = getSoup()
+    tip = soup.find(attrs={'class': 'wea_tips clearfix'})
+    return tip.em.string + '[小明AI管家实时天气情况]'
