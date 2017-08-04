@@ -63,4 +63,4 @@ def getWeatherMsg():
 def getWeatherTitle():
     soup = getSoup()
     tip = soup.find(attrs={'class': 'wea_tips clearfix'})
-    return tip.em.string + '[小明AI管家实时天气情况]'
+    return tip.em.string
