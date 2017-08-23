@@ -56,7 +56,7 @@ def getWeatherMsg():
         if live[ii].dd != None:
             weatherConntent += live[ii].dd.string + ':' + live[ii].dt.string + '\n\n'
         ii += 1
-
+    print(weatherConntent)
     return weatherConntent
 
 
@@ -64,3 +64,5 @@ def getWeatherTitle():
     soup = getSoup()
     tip = soup.find(attrs={'class': 'wea_tips clearfix'})
     return tip.em.string
+
+getWeatherMsg()
